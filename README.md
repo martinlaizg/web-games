@@ -1,154 +1,377 @@
-# Web Games
+# 🎭 Web Games - Hub de Juegos de Mesa Digital
 
-Proyecto de asistente digital para juegos de mesa en grupo. Está pensado como un hub de pequeños juegos y utilidades para jugar en persona, con una capa web para el anfitrión y una capa de servidor para partidas multijugador en tiempo real.
+Tu compañero digital para noches de juegos de mesa en grupo. Un hub de asistentes y herramientas para juegos clásicos de mesa, con una experiencia **100% en español**, optimizada para **móvil** y diseñada para **juego presencial**.
 
-## Visión general
+![Versión](https://img.shields.io/badge/versión-0.1.0-blue)
+![Licencia](https://img.shields.io/badge/licencia-MIT-green)
+![Estado](https://img.shields.io/badge/estado-en%20desarrollo-orange)
 
-Este repositorio combina:
+---
 
-- Frontend en React + TypeScript + Vite
-- Estilos con Tailwind CSS
-- Backend de salas y partidas con Express + Socket.IO
-- Juegos de mesa con lógica local y lógica multijugador
+## 🎮 Características Principales
 
-La idea principal es ofrecer herramientas rápidas para partidas presenciales sin depender de papel ni de pantallas complejas: reparto de roles, seguimiento de reglas, votaciones y coordinación entre jugadores.
+- ✅ **Modo Pase de Móvil**: Reparte roles secretos en el móvil sin papel
+- ✅ **UI Optimizada para Móvil**: Botones grandes, legibilidad clara, flujo intuitivo
+- ✅ **En Español**: Interfaz y contenido completamente en español
+- ✅ **Rutas por Juego**: Cada juego con enlace directo compartible (ej: `/impostor`, `/toc`)
+- ✅ **Persistencia de Sesión**: No pierdes la partida al recargar la página
+- ✅ **Sin Dependencias Externas**: Funciona completamente en navegador
 
-## Estructura del proyecto
+---
 
-```text
-.
-├── index.html
-├── package.json
-├── postcss.config.js
-├── tailwind.config.js
-├── tsconfig.json
-├── vite.config.ts
-├── README.md
-├── .github/
-│   └── copilot-instructions.md
-├── AGENTS.md
-├── src/
-│   ├── App.tsx
-│   ├── main.tsx
-│   ├── index.css
-│   ├── components/
-│   │   ├── layout/
-│   │   └── ui/
-│   ├── data/
-│   ├── games/
-│   │   ├── impostor/
-│   │   └── toc/
-│   ├── lib/
-│   └── types/
-├── server/
-│   ├── package.json
-│   ├── tsconfig.json
-│   └── src/
-│       ├── index.ts
-│       ├── games/
-│       │   ├── impostor.ts
-│       │   └── types.ts
-│       └── rooms/
-│           └── roomManager.ts
-└── node_modules/
-```
+## 🕵️ Juegos Disponibles
 
-## Capas funcionales
+### **El Impostor** ✅ Disponible
 
-### Frontend (`src/`)
+**Deducción y palabras relacionadas**
 
-Es la aplicación cliente y la interfaz principal del usuario.
+El compañero completo para partidas de "El Impostor". Gestiona el reparto secreto de palabras, el pase seguro del móvil entre jugadores y la dinámica de discusión.
 
-- `App.tsx`: hub principal, filtrado de juegos y navegación entre pantallas.
-- `components/`: piezas reutilizables de UI: layout, botones, tarjetas, badges, temporizador.
-- `games/`: vistas específicas de cada juego disponible o en desarrollo.
-- `data/`: listas de palabras, reglas y contenido estático.
-- `lib/`: helpers de sonido, sockets, conexiones con el backend.
-- `types/`: tipos del cliente.
+- **Configuración flexible**: Selecciona número de jugadores, impostores, categorías y dificultad
+- **Revelación por jugador**: Cada jugador ve su palabra/rol en privado
+- **Discusión interactiva**: Lista de jugadores para revisar roles
+- **Persistencia**: La partida se guarda en localStorage
+- **Interfaz móvil**: Botones grandes, texto legible, sin fricción
 
-### Backend (`server/src/`)
+**Acceso**: [http://localhost:3001/impostor](http://localhost:3001/impostor)
 
-Es la capa de lógica multijugador y coordinación en tiempo real.
+### **TOC (Versión Canadiense)** ✅ Disponible
 
-- `index.ts`: arranque del servidor Express + Socket.IO.
-- `rooms/roomManager.ts`: gestión de salas, jugadores, host, reconexiones y limpieza de salas.
-- `games/`: lógica del juego Impostor y sus tipos compartidos.
+**Reglamento táctico & visor de naipes**
 
-## Juegos implementados
+Guía interactiva oficial carta por carta con reglas de equipo (2v2/3v3) y búsqueda de dudas.
 
-### 1. Impostor
+- **Navegación por cartas**: Explora reglas específicas de cada carta francesa
+- **Buscador de reglas**: Encuentra respuestas rápidamente
+- **Diseño responsivo**: Funciona en cualquier pantalla
+- **Barras sticky**: Acceso fácil a la navegación
 
-- Juego principal multijugador.
-- Reparte roles secretos entre jugadores.
-- Gestiona reveal, discusión, votación y puntuación.
-- Tiene flujo de salas reales mediante sockets.
+**Acceso**: [http://localhost:3001/toc](http://localhost:3001/toc)
 
-### 2. TOC (versión canadiense)
+### Próximos Juegos (Planeados)
 
-- Guía interactiva de reglas y dudas.
-- Presenta explicaciones de cartas, reglas de parejas y concepto táctico.
-- Es principalmente un asistente de reglas, no un juego multijugador.
+- 🐺 **Hombres Lobo / Castronegro** - Narrador digital de aldea
+- 📊 **Secret Hitler Companion** - Gestor de políticas y elecciones
+- 📈 **Marcador Universal** - Contador de puntos multi-jugador
 
-## Flujo de datos
+---
 
-1. El usuario entra en la app desde el hub en `App.tsx`.
-2. Cada juego se renderiza como un módulo bajo `src/games/...`.
-3. Los juegos que necesitan sincronización se conectan al servidor a través de `src/lib/socket.ts`.
-4. El servidor crea/gestiona salas y envía estados públicos o privados a cada cliente.
-5. El cliente reacciona a eventos del servidor (`room:updated`, `game:state`, `player:role`, etc.).
+## 🚀 Inicio Rápido
 
-## Convenciones de desarrollo
+### Requisitos
+- **Node.js** >= 18
+- **npm** >= 9
 
-- Mantener la lógica de UI separada de la lógica del servidor.
-- Añadir nuevos juegos bajo `src/games/<nombre>/` y su modelo de tipos compatible.
-- En el backend, centralizar la lógica de sala en `roomManager.ts`.
-- Preferir tipos TypeScript explícitos sobre `any`.
-- Mantener los textos y labels en español para coherencia con la UX.
-- Usar Tailwind para estilos y seguir la estética actual: tonos oscuros, acentos violetas/indigo.
-
-## Comandos de ejecución
-
-### Frontend
+### Instalación
 
 ```bash
+# Clonar el repositorio
+git clone https://github.com/martinlaizg/web-games.git
+cd web-games
+
+# Instalar dependencias (frontend)
 npm install
+
+# Instalar dependencias (backend)
+cd server && npm install && cd ..
+```
+
+### Desarrollo
+
+```bash
+# Iniciar servidor de desarrollo
 npm run dev
+
+# La app estará disponible en http://localhost:3001
+```
+
+### Build para Producción
+
+```bash
+# Compilar y empaquetar
+npm run build
+
+# Los archivos estáticos estáran en ./dist
+```
+
+### Backend (Opcional)
+
+```bash
+cd server
+
+# Desarrollo
+npm run dev
+
+# Build
+npm run build
+```
+
+---
+
+## 📁 Estructura del Proyecto
+
+```
+web-games/
+├── src/                           # Frontend (React + TypeScript)
+│   ├── App.tsx                    # Hub principal y navegación por rutas
+│   ├── main.tsx                   # Punto de entrada
+│   ├── index.css                  # Estilos globales
+│   ├── components/
+│   │   ├── layout/                # Layout y navbar
+│   │   │   ├── Layout.tsx
+│   │   │   └── Navbar.tsx
+│   │   └── ui/                    # Componentes reutilizables
+│   │       ├── Button.tsx
+│   │       ├── Card.tsx
+│   │       ├── Badge.tsx
+│   │       └── Timer.tsx
+│   ├── games/                     # Módulos de juegos
+│   │   ├── impostor/
+│   │   │   ├── ImpostorGame.tsx       # Orquestador principal
+│   │   │   ├── ImpostorSetup.tsx      # Configuración
+│   │   │   ├── ImpostorReveal.tsx     # Revelación por jugador
+│   │   │   ├── ImpostorDiscussion.tsx # Fase de debate
+│   │   │   └── ImpostorVote.tsx       # (Legacy)
+│   │   └── toc/
+│   │       ├── TocGuide.tsx
+│   │       ├── TocRulesOverview.tsx
+│   │       ├── TocCardReference.tsx
+│   │       └── TocFaq.tsx
+│   ├── data/                      # Contenido estático
+│   │   ├── impostorWords.ts       # Diccionario de palabras
+│   │   └── tocRules.ts            # Reglas de TOC
+│   ├── lib/                       # Utilidades
+│   │   ├── socket.ts              # Cliente de Socket.IO
+│   │   └── sound.ts               # Efectos de sonido
+│   └── types/                     # Interfaces TypeScript
+│       ├── game.ts
+│       ├── impostor.ts
+│       └── toc.ts
+├── server/                        # Backend (Express + Socket.IO)
+│   ├── src/
+│   │   ├── index.ts               # Inicialización
+│   │   ├── rooms/
+│   │   │   └── roomManager.ts     # Gestión de salas
+│   │   └── games/
+│   │       ├── impostor.ts        # Lógica del Impostor
+│   │       └── types.ts           # Tipos compartidos
+│   └── tsconfig.json
+├── index.html
+├── package.json
+├── tsconfig.json
+├── vite.config.ts
+├── tailwind.config.js
+├── postcss.config.js
+├── AGENTS.md                      # Contexto operativo para asistentes IA
+└── README.md
+```
+
+---
+
+## 🎨 Stack Tecnológico
+
+### Frontend
+- **React 18** - Librería UI
+- **TypeScript** - Type safety
+- **Vite** - Bundler y dev server
+- **Tailwind CSS** - Estilos
+- **Socket.IO Client** - Comunicación real-time (opcional)
+- **canvas-confetti** - Efectos visuales
+- **lucide-react** - Iconografía
+
+### Backend
+- **Express.js** - Framework web
+- **Socket.IO** - WebSockets para multiplayer
+- **TypeScript** - Type safety
+- **Node.js** >= 18
+
+### Herramientas
+- **Git** - Control de versiones
+- **ESLint/Prettier** - Linting y formato (configurable)
+
+---
+
+## 🛠️ Patrones Importantes
+
+### 1. Separación Cliente-Servidor
+- Frontend y backend viven en carpetas separadas (`src/` y `server/src/`)
+- Los tipos compartidos están en `server/src/games/types.ts`
+
+### 2. Módulos por Juego
+- Cada juego vive en su propia carpeta bajo `src/games/<game>/`
+- Las reglas de negocio del juego están centralizadas en ese módulo
+- No mezcles lógica de juego con componentes de UI genéricos
+
+### 3. Rutas Independientes
+- Cada juego tiene su propia ruta: `/impostor`, `/toc`, etc.
+- La raíz `/` sirve como catálogo de juegos
+- Las URLs son directamente compartibles
+
+### 4. Persistencia de Sesión
+- Se usa `localStorage` para guardar el estado del juego
+- El estado persiste entre recargas de página
+- Se valida antes de restaurar para evitar corrupción
+
+### 5. Componentes Reutilizables
+- Los componentes genéricos van en `src/components/ui/`
+- Reusa antes de crear duplicados
+
+### 6. UI Móvil Primero
+- Botones grandes
+- Texto legible
+- Flujos simples y directos
+- Toca el dispositivo en el que se prueba antes de hacer merge
+
+---
+
+## 🎯 Reglas de Desarrollo
+
+1. **Valida antes de mergear**
+   ```bash
+   npm run build
+   ```
+
+2. **Si tocas Socket.IO**
+   - Actualiza cliente y servidor
+   - Valida el backend también
+
+3. **TypeScript Strict**
+   - Evita `any` salvo justificación explícita
+   - Los tipos deben ser específicos al dominio
+
+4. **Español por Defecto**
+   - Mantén la UI en español
+   - Excepto para tokens técnicos
+
+5. **Test Móvil**
+   - Abre el dev server en `npm run dev -- --host 0.0.0.0`
+   - Accede desde tu móvil: `http://<tu-ip>:3001`
+   - Verifica que funcione en pantalla pequeña
+
+---
+
+## 📝 Comandos Disponibles
+
+### Frontend
+```bash
+npm run dev              # Iniciar dev server
+npm run build            # Compilar para producción
+npm run preview          # Preview de build
+npm run type-check       # Verificar tipos TypeScript
 ```
 
 ### Backend
-
 ```bash
 cd server
+npm run dev              # Iniciar servidor backend
+npm run build            # Compilar TypeScript
+```
+
+---
+
+## 🔧 Configuración
+
+### Variables de Entorno
+
+Crea un archivo `.env.local` en la raíz si necesitas configurar endpoints:
+
+```env
+VITE_SOCKET_URL=http://localhost:3000
+VITE_ENVIRONMENT=development
+```
+
+### Tailwind + PostCSS
+
+La configuración está en:
+- `tailwind.config.js` - Customización de temas
+- `postcss.config.js` - Procesamiento CSS
+
+---
+
+## 🐛 Solución de Problemas
+
+### Dev server no inicia
+```bash
+# Limpia caché de Vite
+rm -rf node_modules/.vite
+
+# Reinstala
 npm install
 npm run dev
 ```
 
-### Build de producción
-
+### Cambios no se reflejan en móvil
 ```bash
-npm run build
+# Asegúrate de que el servidor escucha en todas las interfaces
+npm run dev -- --host 0.0.0.0
+
+# Accede desde http://<tu-ip>:3001 (no localhost)
 ```
 
+### Sesión perdida al recargar
+- Abre la consola del navegador (F12)
+- Verifica que `localStorage` tenga la clave `impostor_session`
+- Si el JSON está corrupto, limpia: `localStorage.clear()`
+
+### Build falla
 ```bash
-cd server
+# Limpia dist
+rm -rf dist
+
+# Intenta de nuevo
 npm run build
+
+# Si persiste, verifica versión de Node
+node --version  # Debe ser >= 18
 ```
 
-## Estado actual del proyecto
+---
 
-- Frontend funcional como hub y catálogo de juegos.
-- Juego de Impostor operativo con flujo real de partida.
-- TOC disponible como guía interactiva.
-- Otras variantes como Hombre Lobo, Secret Hitler o utilities están listadas como proyectos futuros.
+## 📈 Roadmap
 
-## Recomendación para asistentes de IA
+- [ ] Multiplayer por Socket.IO (arquitectura lista)
+- [ ] Más palabras en Impostor
+- [ ] Más juegos (Hombres Lobo, Secret Hitler, etc.)
+- [ ] Estadísticas y historial
+- [ ] Temas personalizables (claro/oscuro)
+- [ ] Soporte offline completo
 
-Cuando edites este proyecto, considera estas reglas:
+---
 
-- No mezcles lógica de juego y lógica de servidor sin necesidad.
-- Mantén el patrón de carpetas por juego.
-- Reutiliza componentes del directorio `src/components/ui`.
-- Si cambias un evento de Socket.IO, ajusta ambas partes: servidor y cliente.
-- Si agregas un juego nuevo, añade su entrada al hub desde `App.tsx`.
-- Prioriza cambios pequeños y compatibles con el resto del proyecto.
-- Mantén la documentación compatible con cualquier agente o herramienta de IA, sin depender de rutas ni configuraciones propietarias.
+## 🤝 Contribuir
+
+Este proyecto está en desarrollo activo. Para contribuir:
+
+1. Fork el repositorio
+2. Crea una rama para tu feature (`git checkout -b feature/nueva-feature`)
+3. Commit tus cambios (`git commit -am 'Agrega nueva feature'`)
+4. Push a la rama (`git push origin feature/nueva-feature`)
+5. Abre un Pull Request
+
+Respeta:
+- La estructura de carpetas actual
+- El estilo de código existente
+- La separación cliente-servidor
+- La prioridad de experiencia móvil
+
+---
+
+## 📄 Licencia
+
+MIT - Libre para usar, modificar y distribuir.
+
+---
+
+## 📞 Contacto & Soporte
+
+- **Issues**: [GitHub Issues](https://github.com/martinlaizg/web-games/issues)
+
+---
+
+## 🎭 Créditos
+
+Diseñado y desarrollado como hub de asistentes para noches de juegos de mesa entre amigos.
+
+---
+
+**MesaHub** - Tu compañero digital para noches de juegos de mesa. ¡Que disfrutes! 🎲
