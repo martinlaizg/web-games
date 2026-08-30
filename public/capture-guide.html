@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Web Games - Guía de Captura de Pantallas</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			min-height: 100vh;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 20px;
+		}
+
+		.container {
+			background: white;
+			border-radius: 12px;
+			box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+			max-width: 800px;
+			padding: 40px;
+		}
+
+		h1 {
+			color: #667eea;
+			margin-bottom: 10px;
+			font-size: 28px;
+		}
+
+		.subtitle {
+			color: #666;
+			margin-bottom: 30px;
+			font-size: 14px;
+		}
+
+		.screenshot-list {
+			display: grid;
+			gap: 20px;
+			margin-bottom: 30px;
+		}
+
+		.screenshot-item {
+			border: 1px solid #e0e0e0;
+			border-radius: 8px;
+			padding: 20px;
+			background: #f9f9f9;
+			transition: all 0.3s ease;
+		}
+
+		.screenshot-item:hover {
+			background: #f0f0f0;
+			border-color: #667eea;
+		}
+
+		.screenshot-item h3 {
+			color: #667eea;
+			margin-bottom: 10px;
+			font-size: 18px;
+		}
+
+		.screenshot-item p {
+			color: #666;
+			font-size: 14px;
+			margin-bottom: 10px;
+			line-height: 1.6;
+		}
+
+		.screenshot-item a {
+			display: inline-block;
+			background: #667eea;
+			color: white;
+			padding: 8px 16px;
+			border-radius: 6px;
+			text-decoration: none;
+			font-size: 14px;
+			transition: background 0.3s;
+			margin-right: 10px;
+		}
+
+		.screenshot-item a:hover {
+			background: #764ba2;
+		}
+
+		.instructions {
+			background: #f0f4ff;
+			border-left: 4px solid #667eea;
+			padding: 20px;
+			border-radius: 6px;
+			margin-bottom: 30px;
+		}
+
+		.instructions h3 {
+			color: #667eea;
+			margin-bottom: 12px;
+		}
+
+		.instructions ol {
+			margin-left: 20px;
+			color: #666;
+			font-size: 14px;
+			line-height: 1.8;
+		}
+
+		.instructions li {
+			margin-bottom: 8px;
+		}
+
+		.quick-command {
+			background: #f0f0f0;
+			border: 1px solid #ddd;
+			border-radius: 6px;
+			padding: 12px;
+			font-family: 'Monaco', 'Courier New', monospace;
+			font-size: 13px;
+			overflow-x: auto;
+			margin-top: 10px;
+			color: #333;
+		}
+
+		.footer {
+			text-align: center;
+			color: #999;
+			font-size: 12px;
+			margin-top: 30px;
+			padding-top: 20px;
+			border-top: 1px solid #e0e0e0;
+		}
+
+		.status {
+			padding: 12px;
+			border-radius: 6px;
+			margin-bottom: 20px;
+			font-size: 14px;
+		}
+
+		.status.success {
+			background: #d4edda;
+			border: 1px solid #c3e6cb;
+			color: #155724;
+		}
+
+		.status.info {
+			background: #d1ecf1;
+			border: 1px solid #bee5eb;
+			color: #0c5460;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<h1>📸 Web Games - Captura de Pantallas</h1>
+		<p class="subtitle">Guía para capturar las pantallas de demostración del proyecto</p>
+
+		<div class="status info">
+			ℹ️ El servidor de desarrollo debe estar corriendo: <code>npm run dev</code>
+		</div>
+
+		<div class="instructions">
+			<h3>✅ Pasos para capturar:</h3>
+			<ol>
+				<li>Asegúrate de que el dev server está corriendo en <code>http://localhost:3001</code></li>
+				<li>Haz clic en "Abrir en navegador" para cada pantalla</li>
+				<li>Espera a que cargue la página completamente</li>
+				<li>En macOS: Presiona <code>Cmd + Shift + 4</code> y selecciona el área a capturar</li>
+				<li>En Windows: Presiona <code>Win + Shift + S</code> y selecciona el área</li>
+				<li>Guarda la captura en <code>public/screenshots/</code> con el nombre sugerido</li>
+			</ol>
+			<div class="quick-command">npm run screenshots</div>
+		</div>
+
+		<div class="screenshot-list">
+			<div class="screenshot-item">
+				<h3>🎭 Pantalla de Inicio</h3>
+				<p><strong>home.png</strong></p>
+				<p>Catálogo de juegos disponibles con descripción, jugadores y duración de cada juego.</p>
+				<a href="http://localhost:3001/" target="_blank">↗ Abrir en navegador</a>
+				<span style="color: #999; font-size: 12px;">Tamaño recomendado: 390×844px (móvil)</span>
+			</div>
+
+			<div class="screenshot-item">
+				<h3>🕵️ Impostor - Configuración</h3>
+				<p><strong>impostor-setup.png</strong></p>
+				<p>Pantalla de configuración donde se seleccionan: número de jugadores, impostores, categorías y
+					dificultad.</p>
+				<a href="http://localhost:3001/impostor" target="_blank">↗ Abrir en navegador</a>
+				<span style="color: #999; font-size: 12px;">Tamaño recomendado: 390×844px (móvil)</span>
+			</div>
+
+			<div class="screenshot-item">
+				<h3>📖 Impostor - Revelación</h3>
+				<p><strong>impostor-reveal.png</strong></p>
+				<p>Pantalla de revelación privada donde cada jugador ve su palabra/rol.</p>
+				<p style="color: #999; font-size: 12px;">💡 Después de configurar y presionar "Jugar", toma una captura
+					de esta pantalla.</p>
+				<span style="color: #999; font-size: 12px;">Tamaño recomendado: 390×844px (móvil)</span>
+			</div>
+
+			<div class="screenshot-item">
+				<h3>💬 Impostor - Discusión</h3>
+				<p><strong>impostor-discussion.png</strong></p>
+				<p>Pantalla de fase de debate con lista de jugadores.</p>
+				<p style="color: #999; font-size: 12px;">💡 Después de la revelación, toma una captura de la pantalla de
+					discusión.</p>
+				<span style="color: #999; font-size: 12px;">Tamaño recomendado: 390×844px (móvil)</span>
+			</div>
+
+			<div class="screenshot-item">
+				<h3>🃏 TOC - Guía de Reglas</h3>
+				<p><strong>toc-guide.png</strong></p>
+				<p>Guía interactiva con navegación de cartas y explicación de reglas.</p>
+				<a href="http://localhost:3001/toc" target="_blank">↗ Abrir en navegador</a>
+				<span style="color: #999; font-size: 12px;">Tamaño recomendado: 390×844px (móvil)</span>
+			</div>
+		</div>
+
+		<div class="status success">
+			✨ Una vez capturadas, guarda las imágenes en <code>public/screenshots/</code> y actualiza el README.md con
+			las referencias.
+		</div>
+
+		<div class="footer">
+			<p>Web Games • Herramienta de captura de pantallas</p>
+			<p>Las capturas se usarán en la documentación del proyecto</p>
+		</div>
+	</div>
+</body>
+
+</html>
