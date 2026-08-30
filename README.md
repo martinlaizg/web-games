@@ -82,7 +82,7 @@ cd server && npm install && cd ..
 # Iniciar servidor de desarrollo (desde code/)
 npm run dev
 
-# La app estará disponible en http://localhost:3001
+# La app estará disponible en http://localhost:3000
 ```
 
 ### Build para Producción
@@ -132,13 +132,23 @@ Cada `push` a la rama `main` construye y publica las imágenes mediante GitHub A
 
 La primera publicación puede requerir cambiar la visibilidad de cada paquete a **Public** desde la sección *Packages* del repositorio en GitHub. Para ejecutar una versión concreta, sustituye `latest` por su etiqueta `sha-...` en la configuración de despliegue.
 
+Los paquetes privados requieren autenticación previa antes de descargarlos:
+
+```bash
+echo "$GITHUB_TOKEN" | docker login ghcr.io -u TU_USUARIO --password-stdin
+```
+
 ---
 
 ## 📁 Estructura del Proyecto
 
 ```
 web-games/
+├── docker-compose.yml             # Despliegue local: web + API
+├── .github/workflows/             # Automatización de publicación en GHCR
 ├── code/                          # Carpeta principal del código fuente
+│   ├── Dockerfile                  # Imágenes multi-stage de frontend y backend
+│   ├── nginx.conf                  # Proxy de API/WebSockets y rutas SPA
 │   ├── src/                       # Frontend (React + TypeScript)
 │   │   ├── App.tsx                # Hub principal y navegación por rutas
 │   │   ├── main.tsx               # Punto de entrada

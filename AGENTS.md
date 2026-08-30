@@ -43,6 +43,15 @@ code/
 
 La documentación del proyecto (README.md, AGENTS.md) permanece en la raíz.
 
+Los recursos de despliegue también se mantienen en el repositorio:
+
+```
+docker-compose.yml                # Orquestación local de web y API
+.github/workflows/publish-images.yml # Publicación de imágenes en GHCR
+code/Dockerfile                   # Builds multi-stage (targets frontend y backend)
+code/nginx.conf                   # SPA, proxy de API y WebSockets
+```
+
 ### Frontend
 
 La parte del cliente vive en `code/src/`.
@@ -61,6 +70,13 @@ La parte del servidor vive en `code/server/src/`.
 - `code/server/src/index.ts` inicializa Express y Socket.IO.
 - `code/server/src/rooms/roomManager.ts` gestiona salas, usuarios y estado compartido.
 - `code/server/src/games/` contiene la lógica multijugador y sus tipos.
+
+### Despliegue
+
+- Docker Compose ejecuta dos servicios: `web` (Nginx + frontend estático) y `api` (Express + Socket.IO).
+- Nginx expone la aplicación por el puerto `8080` local y redirige `/api` y `/socket.io` al servicio `api`; no expongas el puerto del backend salvo que sea necesario para un entorno concreto.
+- El cliente de Socket.IO usa el mismo origen por defecto. Mantén esta propiedad si se modifica la configuración del proxy o de Socket.IO.
+- Cada `push` a `main` publica `web-games-web` y `web-games-api` en GitHub Container Registry con las etiquetas `latest` y `sha-<commit>`.
 
 ## Patrones de trabajo importantes
 
@@ -111,6 +127,14 @@ Y si se toca lógica del backend:
 
 ```bash
 cd code/server && npm run build
+```
+
+Si se modifican `Dockerfile`, `docker-compose.yml` o la configuración de Nginx, valida además el despliegue cuando Docker esté disponible:
+
+```bash
+docker compose config
+docker compose up --build -d
+docker compose down
 ```
 
 ## Áreas de prioridad actual
