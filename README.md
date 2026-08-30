@@ -56,35 +56,6 @@ Guía interactiva oficial carta por carta con reglas de equipo (2v2/3v3) y búsq
 
 ---
 
-## �️ Capturas de Pantalla
-
-Para capturar automáticamente las pantallas del proyecto, ejecuta:
-
-```bash
-npm run screenshots
-```
-
-Esto mostrará una guía interactiva. También puedes abrir directamente: `public/capture-guide.html`
-
-**Pantallas disponibles:**
-
-| Pantalla | Descripción | Acceso |
-|----------|-------------|--------|
-| **Home** | Catálogo de juegos | http://localhost:3001/ |
-| **Impostor Setup** | Configuración del juego | http://localhost:3001/impostor |
-| **Impostor Reveal** | Revelación privada de palabra/rol | Después de configurar |
-| **Impostor Discussion** | Fase de debate | Después de revelación |
-| **TOC Guide** | Guía de reglas | http://localhost:3001/toc |
-
-**Nombres esperados de archivos:**
-- `public/screenshots/home.png`
-- `public/screenshots/impostor-setup.png`
-- `public/screenshots/impostor-reveal.png`
-- `public/screenshots/impostor-discussion.png`
-- `public/screenshots/toc-guide.png`
-
----
-
 ## �🚀 Inicio Rápido
 
 ### Requisitos
@@ -286,7 +257,6 @@ web-games/
 npm run dev              # Iniciar dev server
 npm run build            # Compilar para producción
 npm run preview          # Preview de build
-npm run screenshots      # Guía interactiva para capturar pantallas
 ```
 
 ### Backend
