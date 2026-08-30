@@ -125,7 +125,7 @@ docker compose down
 
 ### Imágenes publicadas en GitHub Container Registry
 
-Cada `push` a la rama `main` construye y publica las imágenes mediante GitHub Actions. Se generan las etiquetas `latest` y `sha-<commit-completo>` para cada servicio:
+Cada `push` a la rama `main` construye y publica las imágenes mediante GitHub Actions. Tras publicar correctamente ambas imágenes, el workflow crea una GitHub Release con la etiqueta inmutable `release-<SHA-corto>`, vinculada al mismo commit. Se generan las etiquetas `latest` y `sha-<commit-completo>` para cada servicio:
 
 - `ghcr.io/martinlaizg/web-games-web`
 - `ghcr.io/martinlaizg/web-games-api`
