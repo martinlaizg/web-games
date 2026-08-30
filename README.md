@@ -115,7 +115,7 @@ Con Docker y Docker Compose instalados, desde la raíz del repositorio:
 docker compose up --build -d
 ```
 
-La aplicación queda disponible en [http://localhost:8080](http://localhost:8080). El contenedor web sirve el frontend y redirige automáticamente las peticiones de API y Socket.IO al backend, por lo que las rutas compartibles como `/impostor` y `/toc` funcionan también al recargar.
+La aplicación queda disponible en [http://localhost:8080](http://localhost:8080). El único contenedor incluye el frontend, Nginx y la API Socket.IO; Nginx redirige internamente las peticiones de API y Socket.IO, por lo que las rutas compartibles como `/impostor` y `/toc` funcionan también al recargar.
 
 Para detenerla:
 
@@ -125,12 +125,11 @@ docker compose down
 
 ### Imágenes publicadas en GitHub Container Registry
 
-Cada `push` a la rama `main` construye y publica las imágenes mediante GitHub Actions. Tras publicar correctamente ambas imágenes, el workflow crea una GitHub Release con versión SemVer y etiqueta `vX.Y.Z`, vinculada al mismo commit. La primera release es `v1.0.0`. Las siguientes versiones se calculan a partir del mensaje del commit: `feat:` incrementa el minor, un cambio incompatible (`!:` o `BREAKING CHANGE`) incrementa el major y el resto incrementa el patch.
+Cada `push` a la rama `main` construye y publica una única imagen mediante GitHub Actions. Tras publicarla correctamente, el workflow crea una GitHub Release con versión SemVer y etiqueta `vX.Y.Z`, vinculada al mismo commit. La primera release es `v1.0.0`. Las siguientes versiones se calculan a partir del mensaje del commit: `feat:` incrementa el minor, un cambio incompatible (`!:` o `BREAKING CHANGE`) incrementa el major y el resto incrementa el patch.
 
-Cada imagen recibe las etiquetas `latest`, `sha-<commit-completo>` y `vX.Y.Z` correspondientes a esa release:
+La imagen recibe las etiquetas `latest`, `sha-<commit-completo>` y `vX.Y.Z` correspondientes a esa release:
 
-- `ghcr.io/martinlaizg/web-games-web`
-- `ghcr.io/martinlaizg/web-games-api`
+- `ghcr.io/martinlaizg/web-games`
 
 La primera publicación puede requerir cambiar la visibilidad de cada paquete a **Public** desde la sección *Packages* del repositorio en GitHub. Para ejecutar una versión concreta, sustituye `latest` por su etiqueta `vX.Y.Z` en la configuración de despliegue.
 
