@@ -1,35 +1,9 @@
-# Dependencies
-node_modules/
-/.pnp
-.pnp.js
-
-# Production
-/dist
-/build
-
-# Environment variables
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# Logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
+# Root level ignores
 .DS_Store
+.vite/
+.env.local
 
-# OS
-Thumbs.db
-
-# Testing
-/coverage
+# Code folder ignores
+code/node_modules/
+code/dist/
+code/.vite/

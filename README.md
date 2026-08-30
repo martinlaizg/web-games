@@ -67,7 +67,7 @@ Guía interactiva oficial carta por carta con reglas de equipo (2v2/3v3) y búsq
 ```bash
 # Clonar el repositorio
 git clone https://github.com/martinlaizg/web-games.git
-cd web-games
+cd web-games/code
 
 # Instalar dependencias (frontend)
 npm install
@@ -79,7 +79,7 @@ cd server && npm install && cd ..
 ### Desarrollo
 
 ```bash
-# Iniciar servidor de desarrollo
+# Iniciar servidor de desarrollo (desde code/)
 npm run dev
 
 # La app estará disponible en http://localhost:3001
@@ -88,15 +88,16 @@ npm run dev
 ### Build para Producción
 
 ```bash
-# Compilar y empaquetar
+# Compilar y empaquetar (desde code/)
 npm run build
 
-# Los archivos estáticos estáran en ./dist
+# Los archivos estáticos estarán en ./code/dist
 ```
 
 ### Backend (Opcional)
 
 ```bash
+# (desde code/server)
 cd server
 
 # Desarrollo
@@ -112,58 +113,64 @@ npm run build
 
 ```
 web-games/
-├── src/                           # Frontend (React + TypeScript)
-│   ├── App.tsx                    # Hub principal y navegación por rutas
-│   ├── main.tsx                   # Punto de entrada
-│   ├── index.css                  # Estilos globales
-│   ├── components/
-│   │   ├── layout/                # Layout y navbar
-│   │   │   ├── Layout.tsx
-│   │   │   └── Navbar.tsx
-│   │   └── ui/                    # Componentes reutilizables
-│   │       ├── Button.tsx
-│   │       ├── Card.tsx
-│   │       ├── Badge.tsx
-│   │       └── Timer.tsx
-│   ├── games/                     # Módulos de juegos
-│   │   ├── impostor/
-│   │   │   ├── ImpostorGame.tsx       # Orquestador principal
-│   │   │   ├── ImpostorSetup.tsx      # Configuración
-│   │   │   ├── ImpostorReveal.tsx     # Revelación por jugador
-│   │   │   ├── ImpostorDiscussion.tsx # Fase de debate
-│   │   │   └── ImpostorVote.tsx       # (Legacy)
-│   │   └── toc/
-│   │       ├── TocGuide.tsx
-│   │       ├── TocRulesOverview.tsx
-│   │       ├── TocCardReference.tsx
-│   │       └── TocFaq.tsx
-│   ├── data/                      # Contenido estático
-│   │   ├── impostorWords.ts       # Diccionario de palabras
-│   │   └── tocRules.ts            # Reglas de TOC
-│   ├── lib/                       # Utilidades
-│   │   ├── socket.ts              # Cliente de Socket.IO
-│   │   └── sound.ts               # Efectos de sonido
-│   └── types/                     # Interfaces TypeScript
-│       ├── game.ts
-│       ├── impostor.ts
-│       └── toc.ts
-├── server/                        # Backend (Express + Socket.IO)
-│   ├── src/
-│   │   ├── index.ts               # Inicialización
-│   │   ├── rooms/
-│   │   │   └── roomManager.ts     # Gestión de salas
-│   │   └── games/
-│   │       ├── impostor.ts        # Lógica del Impostor
-│   │       └── types.ts           # Tipos compartidos
-│   └── tsconfig.json
-├── index.html
-├── package.json
-├── tsconfig.json
-├── vite.config.ts
-├── tailwind.config.js
-├── postcss.config.js
+├── code/                          # Carpeta principal del código fuente
+│   ├── src/                       # Frontend (React + TypeScript)
+│   │   ├── App.tsx                # Hub principal y navegación por rutas
+│   │   ├── main.tsx               # Punto de entrada
+│   │   ├── index.css              # Estilos globales
+│   │   ├── components/
+│   │   │   ├── layout/            # Layout y navbar
+│   │   │   │   ├── Layout.tsx
+│   │   │   │   └── Navbar.tsx
+│   │   │   └── ui/                # Componentes reutilizables
+│   │   │       ├── Button.tsx
+│   │   │       ├── Card.tsx
+│   │   │       ├── Badge.tsx
+│   │   │       └── Timer.tsx
+│   │   ├── games/                 # Módulos de juegos
+│   │   │   ├── impostor/
+│   │   │   │   ├── ImpostorGame.tsx       # Orquestador principal
+│   │   │   │   ├── ImpostorSetup.tsx      # Configuración
+│   │   │   │   ├── ImpostorReveal.tsx     # Revelación por jugador
+│   │   │   │   ├── ImpostorDiscussion.tsx # Fase de debate
+│   │   │   │   └── ImpostorVote.tsx       # (Legacy)
+│   │   │   └── toc/
+│   │   │       ├── TocGuide.tsx
+│   │   │       ├── TocRulesOverview.tsx
+│   │   │       ├── TocCardReference.tsx
+│   │   │       └── TocFaq.tsx
+│   │   ├── data/                  # Contenido estático
+│   │   │   ├── impostorWords.ts   # Diccionario de palabras
+│   │   │   └── tocRules.ts        # Reglas de TOC
+│   │   ├── lib/                   # Utilidades
+│   │   │   ├── socket.ts          # Cliente de Socket.IO
+│   │   │   └── sound.ts           # Efectos de sonido
+│   │   └── types/                 # Interfaces TypeScript
+│   │       ├── game.ts
+│   │       ├── impostor.ts
+│   │       └── toc.ts
+│   ├── server/                    # Backend (Express + Socket.IO)
+│   │   ├── src/
+│   │   │   ├── index.ts           # Inicialización
+│   │   │   ├── rooms/
+│   │   │   │   └── roomManager.ts # Gestión de salas
+│   │   │   └── games/
+│   │   │       ├── impostor.ts    # Lógica del Impostor
+│   │   │       └── types.ts       # Tipos compartidos
+│   │   └── tsconfig.json
+│   ├── index.html
+│   ├── package.json
+│   ├── tsconfig.json
+│   ├── vite.config.ts
+│   ├── tailwind.config.js
+│   ├── postcss.config.js
+│   ├── package-lock.json
+│   ├── .gitignore
+│   └── public/
+├── README.md                      # Documentación del proyecto
 ├── AGENTS.md                      # Contexto operativo para asistentes IA
-└── README.md
+├── .gitignore                     # .gitignore de raíz
+└── .git/
 ```
 
 ---
@@ -251,6 +258,12 @@ web-games/
 ---
 
 ## 📝 Comandos Disponibles
+
+Todos los comandos se ejecutan desde la carpeta `code/`:
+
+```bash
+cd code
+```
 
 ### Frontend
 ```bash
