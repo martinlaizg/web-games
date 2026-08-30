@@ -25,31 +25,49 @@ La aplicación está pensada para uso presencial en mesa, con una UI en español
 
 ## Arquitectura
 
+### Estructura de Carpetas
+
+Todo el código ejecutable está dentro de la carpeta `code/`:
+
+```
+code/
+├── src/              # Frontend (React + TypeScript)
+├── server/           # Backend (Express + Socket.IO)
+├── package.json
+├── tsconfig.json
+├── vite.config.ts
+├── tailwind.config.js
+├── postcss.config.js
+└── index.html
+```
+
+La documentación del proyecto (README.md, AGENTS.md) permanece en la raíz.
+
 ### Frontend
 
-La parte del cliente vive en `src/`.
+La parte del cliente vive en `code/src/`.
 
-- `src/App.tsx` actúa como hub principal y gestiona la navegación por rutas.
-- `src/components/` contiene componentes reutilizables de layout, UI y controles.
-- `src/games/` contiene cada juego o asistente.
-- `src/data/` contiene datos estáticos del contenido del juego.
-- `src/lib/` incluye utilidades como `sound.ts` y cualquier soporte de navegador.
-- `src/types/` contiene los tipos del frontend y modelos del dominio.
+- `code/src/App.tsx` actúa como hub principal y gestiona la navegación por rutas.
+- `code/src/components/` contiene componentes reutilizables de layout, UI y controles.
+- `code/src/games/` contiene cada juego o asistente.
+- `code/src/data/` contiene datos estáticos del contenido del juego.
+- `code/src/lib/` incluye utilidades como `sound.ts` y cualquier soporte de navegador.
+- `code/src/types/` contiene los tipos del frontend y modelos del dominio.
 
 ### Backend
 
-La parte del servidor vive en `server/src/`.
+La parte del servidor vive en `code/server/src/`.
 
-- `server/src/index.ts` inicializa Express y Socket.IO.
-- `server/src/rooms/roomManager.ts` gestiona salas, usuarios y estado compartido.
-- `server/src/games/` contiene la lógica multijugador y sus tipos.
+- `code/server/src/index.ts` inicializa Express y Socket.IO.
+- `code/server/src/rooms/roomManager.ts` gestiona salas, usuarios y estado compartido.
+- `code/server/src/games/` contiene la lógica multijugador y sus tipos.
 
 ## Patrones de trabajo importantes
 
 1. Mantén la separación entre cliente y servidor.
 2. Si se cambia un evento Socket, actualiza también la parte cliente y la parte servidor.
-3. Cada juego debe seguir viviendo en su propio módulo dentro de `src/games/<game>/` y, si aplica, en `server/src/games/`.
-4. Reusa primero los componentes de `src/components/ui` antes de crear duplicados.
+3. Cada juego debe seguir viviendo en su propio módulo dentro de `code/src/games/<game>/` y, si aplica, en `code/server/src/games/`.
+4. Reusa primero los componentes de `code/src/components/ui` antes de crear duplicados.
 5. Mantén la UI en español salvo justificación clara.
 6. Usa Tailwind como mecanismo principal de estilo.
 7. Evita `any` salvo justificación explícita.
@@ -75,23 +93,24 @@ La parte del servidor vive en `server/src/`.
 ## Flujo de desarrollo recomendado
 
 - Comprueba primero la estructura del juego antes de tocar propiedades compartidas.
-- Revisa el patrón actual de `App.tsx` y la capa de navegación antes de integrar un nuevo juego o ruta.
+- Revisa el patrón actual de `code/src/App.tsx` y la capa de navegación antes de integrar un nuevo juego o ruta.
 - Mantén cambios incrementales en lugar de refactors invasivos.
 - Si agregas un juego nuevo, incluye navegación, estado y contenido en el hub principal.
 - Valida siempre el flujo móvil de la interacción principal en los cambios de UI.
 
 ## Validación
 
-Antes de cerrar un cambio relevante, valida con el comando más cercano al área modificada:
+Antes de cerrar un cambio relevante, navega a la carpeta `code/` y valida con el comando más cercano al área modificada:
 
 ```bash
+cd code
 npm run build
 ```
 
 Y si se toca lógica del backend:
 
 ```bash
-cd server && npm run build
+cd code/server && npm run build
 ```
 
 ## Áreas de prioridad actual
