@@ -76,7 +76,7 @@ La parte del servidor vive en `code/server/src/`.
 - Docker Compose ejecuta un servicio `app` que contiene Nginx, el frontend y la API Express + Socket.IO.
 - Nginx expone la aplicación por el puerto `8080` local y redirige `/api` y `/socket.io` al backend interno en `127.0.0.1:4000`; no expongas el puerto del backend.
 - El cliente de Socket.IO usa el mismo origen por defecto. Mantén esta propiedad si se modifica la configuración del proxy o de Socket.IO.
-- Cada `push` a `main` calcula una versión SemVer y publica la imagen única `web-games` con las etiquetas `latest`, `sha-<commit>` y `vX.Y.Z`. La primera versión es `v1.0.0`; `feat:` incrementa el minor, cambios incompatibles (`!:` o `BREAKING CHANGE`) el major y el resto el patch. Tras una publicación correcta, el workflow crea la GitHub Release `vX.Y.Z` vinculada al mismo commit.
+- Cada `push` a `main` lee la versión SemVer de `code/package.json` y exige que coincida con `code/server/package.json`. El workflow publica la imagen única `web-games` con las etiquetas `latest`, `sha-<commit>` y `vX.Y.Z`, y tras una publicación correcta crea la GitHub Release `vX.Y.Z` vinculada al mismo commit. Incrementa explícitamente ambas versiones antes de integrar una nueva release.
 
 ## Patrones de trabajo importantes
 

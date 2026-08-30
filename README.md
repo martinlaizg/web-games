@@ -125,7 +125,9 @@ docker compose down
 
 ### Imágenes publicadas en GitHub Container Registry
 
-Cada `push` a la rama `main` construye y publica una única imagen mediante GitHub Actions. Tras publicarla correctamente, el workflow crea una GitHub Release con versión SemVer y etiqueta `vX.Y.Z`, vinculada al mismo commit. La primera release es `v1.0.0`. Las siguientes versiones se calculan a partir del mensaje del commit: `feat:` incrementa el minor, un cambio incompatible (`!:` o `BREAKING CHANGE`) incrementa el major y el resto incrementa el patch.
+Cada `push` a la rama `main` construye y publica una única imagen mediante GitHub Actions. Tras publicarla correctamente, el workflow crea una GitHub Release con versión SemVer y etiqueta `vX.Y.Z`, vinculada al mismo commit. La versión se lee de `code/package.json`; `code/server/package.json` debe contener exactamente la misma. La versión inicial es `1.0.0`.
+
+Antes de integrar una nueva release, actualiza ambas versiones siguiendo SemVer: incrementa `patch` para correcciones, `minor` para funcionalidades compatibles y `major` para cambios incompatibles. Si no coinciden, no tienen el formato `X.Y.Z` o esa versión ya se ha publicado, el workflow falla antes de publicar.
 
 La imagen recibe las etiquetas `latest`, `sha-<commit-completo>` y `vX.Y.Z` correspondientes a esa release:
 

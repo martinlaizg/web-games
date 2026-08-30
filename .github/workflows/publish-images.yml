@@ -15,7 +15,7 @@ env:
 
 jobs:
   version:
-    name: Calcular versión
+    name: Validar versión
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -23,34 +23,31 @@ jobs:
       tag: ${{ steps.version.outputs.tag }}
 
     steps:
-      - name: Descargar historial y etiquetas
+      - name: Descargar código
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Calcular la siguiente versión SemVer
+      - name: Leer y validar versión de los paquetes
         id: version
-        env:
-          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
         run: |
-          latest_tag="$(git tag --list 'v[0-9]*' --sort=-v:refname | head -n 1)"
-          if [ -z "$latest_tag" ]; then
-            echo "tag=v1.0.0" >> "$GITHUB_OUTPUT"
-            exit 0
+          client_version="$(node -p "require('./code/package.json').version")"
+          server_version="$(node -p "require('./code/server/package.json').version")"
+
+          if [ "$client_version" != "$server_version" ]; then
+            echo "Las versiones de frontend y backend deben coincidir." >&2
+            exit 1
           fi
 
-          version="${latest_tag#v}"
-          IFS='.' read -r major minor patch <<< "$version"
-
-          if printf '%s' "$COMMIT_MESSAGE" | grep -Eq 'BREAKING CHANGE|^[[:alpha:]]+(\([^)]+\))?!:'; then
-            major=$((major + 1)); minor=0; patch=0
-          elif printf '%s' "$COMMIT_MESSAGE" | grep -Eq '^feat(\([^)]+\))?:'; then
-            minor=$((minor + 1)); patch=0
-          else
-            patch=$((patch + 1))
+          if ! printf '%s' "$client_version" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "La versión debe tener el formato X.Y.Z." >&2
+            exit 1
           fi
 
-          echo "tag=v${major}.${minor}.${patch}" >> "$GITHUB_OUTPUT"
+          if git ls-remote --exit-code --tags origin "v${client_version}" > /dev/null 2>&1; then
+            echo "La versión v${client_version} ya está publicada. Incrementa los package.json." >&2
+            exit 1
+          fi
+
+          echo "tag=v${client_version}" >> "$GITHUB_OUTPUT"
 
   publish:
     name: Construir y publicar
