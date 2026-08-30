@@ -46,9 +46,9 @@ La documentación del proyecto (README.md, AGENTS.md) permanece en la raíz.
 Los recursos de despliegue también se mantienen en el repositorio:
 
 ```
-docker-compose.yml                # Orquestación local de web y API
+docker-compose.yml                # Orquestación local de la aplicación única
 .github/workflows/publish-images.yml # Publicación de imágenes en GHCR
-code/Dockerfile                   # Builds multi-stage (targets frontend y backend)
+code/Dockerfile                   # Build multi-stage de la imagen única
 code/nginx.conf                   # SPA, proxy de API y WebSockets
 ```
 
@@ -73,10 +73,10 @@ La parte del servidor vive en `code/server/src/`.
 
 ### Despliegue
 
-- Docker Compose ejecuta dos servicios: `web` (Nginx + frontend estático) y `api` (Express + Socket.IO).
-- Nginx expone la aplicación por el puerto `8080` local y redirige `/api` y `/socket.io` al servicio `api`; no expongas el puerto del backend salvo que sea necesario para un entorno concreto.
+- Docker Compose ejecuta un servicio `app` que contiene Nginx, el frontend y la API Express + Socket.IO.
+- Nginx expone la aplicación por el puerto `8080` local y redirige `/api` y `/socket.io` al backend interno en `127.0.0.1:4000`; no expongas el puerto del backend.
 - El cliente de Socket.IO usa el mismo origen por defecto. Mantén esta propiedad si se modifica la configuración del proxy o de Socket.IO.
-- Cada `push` a `main` publica `web-games-web` y `web-games-api` en GitHub Container Registry con las etiquetas `latest` y `sha-<commit>`. Tras una publicación correcta, el workflow crea una GitHub Release `release-<SHA-corto>` vinculada al mismo commit.
+- Cada `push` a `main` lee la versión SemVer de `code/package.json` y exige que coincida con `code/server/package.json`. El workflow publica la imagen única `web-games` con las etiquetas `latest`, `sha-<commit>` y `vX.Y.Z`, y tras una publicación correcta crea la GitHub Release `vX.Y.Z` vinculada al mismo commit. Incrementa explícitamente ambas versiones antes de integrar una nueva release.
 
 ## Patrones de trabajo importantes
 

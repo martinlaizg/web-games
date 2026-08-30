@@ -5,14 +5,53 @@ on:
     branches:
       - main
 
+concurrency:
+  group: publish-and-release-main
+  cancel-in-progress: false
+
 env:
   REGISTRY: ghcr.io
-  WEB_IMAGE: ghcr.io/${{ github.repository_owner }}/web-games-web
-  API_IMAGE: ghcr.io/${{ github.repository_owner }}/web-games-api
+  IMAGE: ghcr.io/${{ github.repository_owner }}/web-games
 
 jobs:
+  version:
+    name: Validar versión
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      tag: ${{ steps.version.outputs.tag }}
+
+    steps:
+      - name: Descargar código
+        uses: actions/checkout@v4
+
+      - name: Leer y validar versión de los paquetes
+        id: version
+        run: |
+          client_version="$(node -p "require('./code/package.json').version")"
+          server_version="$(node -p "require('./code/server/package.json').version")"
+
+          if [ "$client_version" != "$server_version" ]; then
+            echo "Las versiones de frontend y backend deben coincidir." >&2
+            exit 1
+          fi
+
+          if ! printf '%s' "$client_version" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "La versión debe tener el formato X.Y.Z." >&2
+            exit 1
+          fi
+
+          if git ls-remote --exit-code --tags origin "v${client_version}" > /dev/null 2>&1; then
+            echo "La versión v${client_version} ya está publicada. Incrementa los package.json." >&2
+            exit 1
+          fi
+
+          echo "tag=v${client_version}" >> "$GITHUB_OUTPUT"
+
   publish:
     name: Construir y publicar
+    needs: version
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -32,33 +71,22 @@ jobs:
       - name: Configurar Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Construir y publicar la imagen web
+      - name: Construir y publicar la imagen de la aplicación
         uses: docker/build-push-action@v6
         with:
           context: ./code
-          target: frontend
+          target: app
           push: true
           tags: |
-            ${{ env.WEB_IMAGE }}:latest
-            ${{ env.WEB_IMAGE }}:sha-${{ github.sha }}
-          cache-from: type=gha,scope=web
-          cache-to: type=gha,mode=max,scope=web
-
-      - name: Construir y publicar la imagen de API
-        uses: docker/build-push-action@v6
-        with:
-          context: ./code
-          target: backend
-          push: true
-          tags: |
-            ${{ env.API_IMAGE }}:latest
-            ${{ env.API_IMAGE }}:sha-${{ github.sha }}
-          cache-from: type=gha,scope=api
-          cache-to: type=gha,mode=max,scope=api
+            ${{ env.IMAGE }}:latest
+            ${{ env.IMAGE }}:sha-${{ github.sha }}
+            ${{ env.IMAGE }}:${{ needs.version.outputs.tag }}
+          cache-from: type=gha,scope=app
+          cache-to: type=gha,mode=max,scope=app
 
   release:
     name: Crear release
-    needs: publish
+    needs: [version, publish]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -70,13 +98,13 @@ jobs:
       - name: Crear release para el commit publicado
         env:
           GH_TOKEN: ${{ github.token }}
+          TAG: ${{ needs.version.outputs.tag }}
         run: |
-          tag="release-${GITHUB_SHA::7}"
-          if gh release view "$tag" > /dev/null 2>&1; then
-            echo "La release $tag ya existe."
+          if gh release view "$TAG" > /dev/null 2>&1; then
+            echo "La release $TAG ya existe."
             exit 0
           fi
-          gh release create "$tag" \
+          gh release create "$TAG" \
             --target "$GITHUB_SHA" \
-            --title "Release $tag" \
+            --title "Release $TAG" \
             --generate-notes
