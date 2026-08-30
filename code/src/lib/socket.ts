@@ -5,7 +5,9 @@ export type { RoomPublicInfo, ImpostorPublicState, GameName, ImpostorServerConfi
 
 // ── Singleton socket ──────────────────────────────────────────────────────────
 
-const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:4000';
+// En producción el proxy inverso sirve la API y Socket.IO desde el mismo origen.
+// VITE_SERVER_URL sigue permitiendo apuntar a un servidor remoto cuando sea necesario.
+const SERVER_URL = import.meta.env.VITE_SERVER_URL || window.location.origin;
 
 // We type the socket loosely here since the strict generic types require TS 5+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

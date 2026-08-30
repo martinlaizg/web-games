@@ -107,6 +107,31 @@ npm run dev
 npm run build
 ```
 
+### Despliegue con Docker
+
+Con Docker y Docker Compose instalados, desde la raíz del repositorio:
+
+```bash
+docker compose up --build -d
+```
+
+La aplicación queda disponible en [http://localhost:8080](http://localhost:8080). El contenedor web sirve el frontend y redirige automáticamente las peticiones de API y Socket.IO al backend, por lo que las rutas compartibles como `/impostor` y `/toc` funcionan también al recargar.
+
+Para detenerla:
+
+```bash
+docker compose down
+```
+
+### Imágenes publicadas en GitHub Container Registry
+
+Cada `push` a la rama `main` construye y publica las imágenes mediante GitHub Actions. Se generan las etiquetas `latest` y `sha-<commit-completo>` para cada servicio:
+
+- `ghcr.io/martinlaizg/web-games-web`
+- `ghcr.io/martinlaizg/web-games-api`
+
+La primera publicación puede requerir cambiar la visibilidad de cada paquete a **Public** desde la sección *Packages* del repositorio en GitHub. Para ejecutar una versión concreta, sustituye `latest` por su etiqueta `sha-...` en la configuración de despliegue.
+
 ---
 
 ## 📁 Estructura del Proyecto
