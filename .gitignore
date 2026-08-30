@@ -6,4 +6,5 @@
 # Code folder ignores
 code/node_modules/
 code/dist/
+code/server/dist/
 code/.vite/

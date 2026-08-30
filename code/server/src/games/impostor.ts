@@ -5,6 +5,8 @@ import {
   GamePhase,
 } from './types';
 
+export type { ImpostorServerConfig } from './types';
+
 // ── Word data (lightweight copy for server-side use) ─────────────────────────
 
 const WORD_CATEGORIES: Record<string, { name: string; words: string[] }> = {
