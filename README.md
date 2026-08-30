@@ -125,12 +125,14 @@ docker compose down
 
 ### Imágenes publicadas en GitHub Container Registry
 
-Cada `push` a la rama `main` construye y publica las imágenes mediante GitHub Actions. Tras publicar correctamente ambas imágenes, el workflow crea una GitHub Release con la etiqueta inmutable `release-<SHA-corto>`, vinculada al mismo commit. Se generan las etiquetas `latest` y `sha-<commit-completo>` para cada servicio:
+Cada `push` a la rama `main` construye y publica las imágenes mediante GitHub Actions. Tras publicar correctamente ambas imágenes, el workflow crea una GitHub Release con versión SemVer y etiqueta `vX.Y.Z`, vinculada al mismo commit. La primera release es `v1.0.0`. Las siguientes versiones se calculan a partir del mensaje del commit: `feat:` incrementa el minor, un cambio incompatible (`!:` o `BREAKING CHANGE`) incrementa el major y el resto incrementa el patch.
+
+Cada imagen recibe las etiquetas `latest`, `sha-<commit-completo>` y `vX.Y.Z` correspondientes a esa release:
 
 - `ghcr.io/martinlaizg/web-games-web`
 - `ghcr.io/martinlaizg/web-games-api`
 
-La primera publicación puede requerir cambiar la visibilidad de cada paquete a **Public** desde la sección *Packages* del repositorio en GitHub. Para ejecutar una versión concreta, sustituye `latest` por su etiqueta `sha-...` en la configuración de despliegue.
+La primera publicación puede requerir cambiar la visibilidad de cada paquete a **Public** desde la sección *Packages* del repositorio en GitHub. Para ejecutar una versión concreta, sustituye `latest` por su etiqueta `vX.Y.Z` en la configuración de despliegue.
 
 Los paquetes privados requieren autenticación previa antes de descargarlos:
 

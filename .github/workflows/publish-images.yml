@@ -5,14 +5,57 @@ on:
     branches:
       - main
 
+concurrency:
+  group: publish-and-release-main
+  cancel-in-progress: false
+
 env:
   REGISTRY: ghcr.io
   WEB_IMAGE: ghcr.io/${{ github.repository_owner }}/web-games-web
   API_IMAGE: ghcr.io/${{ github.repository_owner }}/web-games-api
 
 jobs:
+  version:
+    name: Calcular versión
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      tag: ${{ steps.version.outputs.tag }}
+
+    steps:
+      - name: Descargar historial y etiquetas
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Calcular la siguiente versión SemVer
+        id: version
+        env:
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+        run: |
+          latest_tag="$(git tag --list 'v[0-9]*' --sort=-v:refname | head -n 1)"
+          if [ -z "$latest_tag" ]; then
+            echo "tag=v1.0.0" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          version="${latest_tag#v}"
+          IFS='.' read -r major minor patch <<< "$version"
+
+          if printf '%s' "$COMMIT_MESSAGE" | grep -Eq 'BREAKING CHANGE|^[[:alpha:]]+(\([^)]+\))?!:'; then
+            major=$((major + 1)); minor=0; patch=0
+          elif printf '%s' "$COMMIT_MESSAGE" | grep -Eq '^feat(\([^)]+\))?:'; then
+            minor=$((minor + 1)); patch=0
+          else
+            patch=$((patch + 1))
+          fi
+
+          echo "tag=v${major}.${minor}.${patch}" >> "$GITHUB_OUTPUT"
+
   publish:
     name: Construir y publicar
+    needs: version
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -41,6 +84,7 @@ jobs:
           tags: |
             ${{ env.WEB_IMAGE }}:latest
             ${{ env.WEB_IMAGE }}:sha-${{ github.sha }}
+            ${{ env.WEB_IMAGE }}:${{ needs.version.outputs.tag }}
           cache-from: type=gha,scope=web
           cache-to: type=gha,mode=max,scope=web
 
@@ -53,12 +97,13 @@ jobs:
           tags: |
             ${{ env.API_IMAGE }}:latest
             ${{ env.API_IMAGE }}:sha-${{ github.sha }}
+            ${{ env.API_IMAGE }}:${{ needs.version.outputs.tag }}
           cache-from: type=gha,scope=api
           cache-to: type=gha,mode=max,scope=api
 
   release:
     name: Crear release
-    needs: publish
+    needs: [version, publish]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -70,13 +115,13 @@ jobs:
       - name: Crear release para el commit publicado
         env:
           GH_TOKEN: ${{ github.token }}
+          TAG: ${{ needs.version.outputs.tag }}
         run: |
-          tag="release-${GITHUB_SHA::7}"
-          if gh release view "$tag" > /dev/null 2>&1; then
-            echo "La release $tag ya existe."
+          if gh release view "$TAG" > /dev/null 2>&1; then
+            echo "La release $TAG ya existe."
             exit 0
           fi
-          gh release create "$tag" \
+          gh release create "$TAG" \
             --target "$GITHUB_SHA" \
-            --title "Release $tag" \
+            --title "Release $TAG" \
             --generate-notes
