@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sparkles, Home, BookOpen, UserX, Volume2, VolumeX } from 'lucide-react';
+import { Sparkles, Home, BookOpen, UserX, Volume2, VolumeX, Calculator } from 'lucide-react';
 import { sound } from '../../lib/sound';
 
 interface NavbarProps {
@@ -81,6 +81,18 @@ export const Navbar: React.FC<NavbarProps> = ({
           >
             <BookOpen size={15} />
             <span>Reglas TOC</span>
+          </button>
+
+          <button
+            onClick={() => onSelectGame('scorekeeper')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 ${
+              activeGameId === 'scorekeeper'
+                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
+            }`}
+          >
+            <Calculator size={15} />
+            <span className="hidden md:inline">Marcador</span>
           </button>
 
           <div className="h-5 w-px bg-slate-800 mx-1 hidden xs:block" />

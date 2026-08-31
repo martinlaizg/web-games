@@ -5,6 +5,7 @@ import { Badge } from './components/ui/Badge';
 import { Button } from './components/ui/Button';
 import { ImpostorGame } from './games/impostor/ImpostorGame';
 import { TocGuide } from './games/toc/TocGuide';
+import { ScorekeeperGame } from './games/scorekeeper/ScorekeeperGame';
 import {
   Users,
   BookOpen,
@@ -90,6 +91,7 @@ const resolveGameFromPath = (path: string): string | null => {
 
   if (cleanPath === '/impostor') return 'impostor';
   if (cleanPath === '/toc') return 'toc';
+  if (cleanPath === '/scorekeeper') return 'scorekeeper';
   return null;
 };
 
@@ -112,7 +114,7 @@ export function App() {
 
   const handleSelectGame = (gameId: string) => {
     sound.playClick();
-    const nextPath = gameId === 'impostor' || gameId === 'toc' ? `/${gameId}` : '/';
+    const nextPath = gameId === 'impostor' || gameId === 'toc' || gameId === 'scorekeeper' ? `/${gameId}` : '/';
     window.history.pushState({}, '', nextPath);
     setActiveGameId(gameId);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -149,6 +151,7 @@ export function App() {
       {/* 1. If Game Active: Render Game View */}
       {activeGameId === 'impostor' && <ImpostorGame />}
       {activeGameId === 'toc' && <TocGuide />}
+      {activeGameId === 'scorekeeper' && <ScorekeeperGame />}
 
       {/* 2. If Home: Render Catalog and Hub Dashboard */}
       {activeGameId === null && (
@@ -226,7 +229,7 @@ export function App() {
           {/* Games Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {filteredGames.map(game => {
-              const isReady = game.id === 'impostor' || game.id === 'toc';
+              const isReady = game.id === 'impostor' || game.id === 'toc' || game.id === 'scorekeeper';
 
               return (
                 <Card
@@ -296,7 +299,7 @@ export function App() {
                             handleSelectGame(game.id);
                           }}
                         >
-                          {game.id === 'toc' ? 'Ver Reglas y Cartas' : 'Jugar Ahora'}
+                          {game.id === 'toc' ? 'Ver Reglas y Cartas' : game.id === 'scorekeeper' ? 'Abrir Marcador' : 'Jugar Ahora'}
                         </Button>
                       ) : (
                         <div className="text-center py-2 text-xs font-semibold text-slate-500 bg-slate-800/40 rounded-xl">
